@@ -1,6 +1,5 @@
 import { Flex, Select, Text } from '@radix-ui/themes';
-import { useEffect } from 'react';
-
+import { useEffect, useId } from 'react';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 
 type Option = { label: string; value: string };
@@ -21,10 +20,13 @@ export const SelectInput = ({
 }: SelectInputProps) => {
   const { register, setValue } = useFormContext();
   const value = useWatch({ name });
-
   const { errors } = useFormState({ name });
 
   const error = errors[name];
+
+  const reactId = useId();
+  const selectId = `${reactId}-${name}`;
+  const errorId = `${selectId}-error`;
 
   useEffect(() => {
     register(name, {
@@ -35,24 +37,26 @@ export const SelectInput = ({
   return (
     <Flex direction="column">
       {label && (
-        <label>
+        <label htmlFor={selectId}>
           <Text weight="bold">{label}</Text>
         </label>
       )}
       <Select.Root
-        defaultValue={value}
         value={value}
         onValueChange={(value) =>
           setValue(name, value, { shouldValidate: true })
         }
       >
-        <Select.Trigger placeholder={placeholder} />
+        <Select.Trigger
+          id={selectId}
+          placeholder={placeholder}
+          aria-required={required}
+          aria-invalid={!!error}
+          aria-describedby={error ? errorId : undefined}
+        />
         <Select.Content>
           {options.map((option) => (
-            <Select.Item
-              key={String(option.value)}
-              value={String(option.value)}
-            >
+            <Select.Item key={option.value} value={option.value}>
               {option.label}
             </Select.Item>
           ))}
@@ -60,7 +64,7 @@ export const SelectInput = ({
       </Select.Root>
 
       {error && (
-        <Text color="red" size="1">
+        <Text id={errorId} color="red" size="1">
           {String(error.message)}
         </Text>
       )}

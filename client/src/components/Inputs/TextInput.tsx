@@ -1,5 +1,5 @@
 import { Flex, Text, TextField } from '@radix-ui/themes';
-import type React from 'react';
+import React, { useId } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
 
 type TextInputProps = {
@@ -17,30 +17,36 @@ export const TextInput = ({
   required = false,
 }: TextInputProps) => {
   const { register } = useFormContext();
-
   const { errors } = useFormState({ name });
 
   const error = errors[name];
+  const reactId = useId();
+  const inputId = `${reactId}-${name}`;
+  const errorId = `${inputId}-error`;
 
   return (
     <Flex direction="column">
       {label && (
-        <label>
+        <label htmlFor={inputId}>
           <Text weight="bold">{label}</Text>
         </label>
       )}
       <TextField.Root
+        id={inputId}
         placeholder={placeholder}
+        aria-required={required}
+        aria-invalid={!!error}
+        aria-describedby={error ? errorId : undefined}
         {...register(name, {
           required: required ? 'This field is required' : undefined,
         })}
         data-1p-ignore // Disables 1password helper
       >
-        {icon && <TextField.Slot>{icon}</TextField.Slot>}
+        {icon && <TextField.Slot aria-hidden="true">{icon}</TextField.Slot>}
       </TextField.Root>
 
       {error && (
-        <Text color="red" size="1">
+        <Text id={errorId} color="red" size="1">
           {String(error.message)}
         </Text>
       )}

@@ -49,7 +49,10 @@ export const RolesTable = ({
                   <Flex justify="end">
                     <DropdownMenu.Root>
                       <DropdownMenu.Trigger>
-                        <IconButton variant="soft">
+                        <IconButton
+                          variant="soft"
+                          aria-label={`Actions for ${name}`}
+                        >
                           <DotsVerticalIcon />
                         </IconButton>
                       </DropdownMenu.Trigger>
