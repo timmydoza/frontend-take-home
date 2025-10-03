@@ -1,22 +1,6 @@
-import { Flex, Table } from '@radix-ui/themes';
+import { Avatar, Flex, Table } from '@radix-ui/themes';
 import type { Role, User } from '../api/models';
 import { TableSkeleton } from './TableSkeleton';
-
-type UserImageProps = {
-  url: string;
-  name: string;
-};
-const UserImage = ({ url, name }: UserImageProps) => {
-  return (
-    <Flex width="1.5rem">
-      <img
-        src={url}
-        alt={`Profile photo for ${name}`}
-        style={{ width: '100%', borderRadius: '100%' }}
-      />
-    </Flex>
-  );
-};
 
 type UserTableProps = {
   users: User[] | undefined;
@@ -45,7 +29,12 @@ export const UserTable = ({ users, rolesMap }: UserTableProps) => {
             <Table.Row key={user.id}>
               <Table.RowHeaderCell>
                 <Flex direction="row" gap="1rem">
-                  <UserImage url={user.photo} name={name} />
+                  <Avatar
+                    size="1"
+                    src={user.photo}
+                    radius="full"
+                    fallback={user.first[0]} // First letter of name
+                  />
                   {name}
                 </Flex>
               </Table.RowHeaderCell>

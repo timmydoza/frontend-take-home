@@ -1,6 +1,7 @@
-import { Table } from '@radix-ui/themes';
+import { DropdownMenu, Flex, IconButton, Table } from '@radix-ui/themes';
 import type { Role } from '../api/models';
 import { TableSkeleton } from './TableSkeleton';
+import { DotsVerticalIcon } from '@radix-ui/react-icons';
 
 type RoleTableProps = {
   roles: Role[] | undefined;
@@ -16,6 +17,7 @@ export const RolesTable = ({ roles }: RoleTableProps) => {
           <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Is Default</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Created Date</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -27,6 +29,21 @@ export const RolesTable = ({ roles }: RoleTableProps) => {
               <Table.RowHeaderCell>{role.name}</Table.RowHeaderCell>
               <Table.Cell>{String(role.isDefault).toUpperCase()}</Table.Cell>
               <Table.Cell>{dateJoined}</Table.Cell>
+              <Table.Cell>
+                <Flex justify="end">
+                  <DropdownMenu.Root>
+                    <DropdownMenu.Trigger>
+                      <IconButton variant="soft">
+                        <DotsVerticalIcon />
+                      </IconButton>
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu.Content>
+                      <DropdownMenu.Item>Edit</DropdownMenu.Item>
+                      <DropdownMenu.Item>Delete</DropdownMenu.Item>
+                    </DropdownMenu.Content>
+                  </DropdownMenu.Root>
+                </Flex>
+              </Table.Cell>
             </Table.Row>
           );
         })}
@@ -34,3 +51,11 @@ export const RolesTable = ({ roles }: RoleTableProps) => {
     </Table.Root>
   );
 };
+
+// stuff to do
+/* make dialogs for edit, and delete for roles and users
+make dialog for vieweing selected entitity
+fix select input
+add aria
+
+*/

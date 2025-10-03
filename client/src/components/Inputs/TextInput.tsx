@@ -1,6 +1,6 @@
-import { Text, TextField } from '@radix-ui/themes';
+import { Flex, Text, TextField } from '@radix-ui/themes';
 import type React from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useFormState } from 'react-hook-form';
 
 type TextInputProps = {
   name: string;
@@ -16,15 +16,25 @@ export const TextInput = ({
   icon,
   required = false,
 }: TextInputProps) => {
-  const { register, getFieldState } = useFormContext();
+  const { register } = useFormContext();
 
-  const { error } = getFieldState(name);
+  const { errors } = useFormState({ name });
+
+  const error = errors[name];
 
   return (
-    <TextField.Root placeholder={placeholder} {...register(name, { required })}>
-      {label}
-      {icon && <TextField.Slot>{icon}</TextField.Slot>}
-      {error && <Text>I'm an error!</Text>}
-    </TextField.Root>
+    <Flex direction="column">
+      {label && <label>{label}</label>}
+      <TextField.Root
+        placeholder={placeholder}
+        {...register(name, {
+          required: required ? 'This field is required' : undefined,
+        })}
+      >
+        {icon && <TextField.Slot>{icon}</TextField.Slot>}
+      </TextField.Root>
+
+      {error && <Text color="red">{String(error.message)}</Text>}
+    </Flex>
   );
 };
