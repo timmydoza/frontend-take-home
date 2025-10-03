@@ -59,7 +59,7 @@ export const RolesTable = ({
                       <DropdownMenu.Trigger>
                         <IconButton
                           variant="soft"
-                          aria-label={`Actions for ${name}`}
+                          aria-label={`Actions for ${role.name}`}
                         >
                           <DotsVerticalIcon />
                         </IconButton>
