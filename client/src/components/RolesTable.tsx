@@ -2,6 +2,8 @@ import { DropdownMenu, Flex, IconButton, Table } from '@radix-ui/themes';
 import type { Role } from '../api/models';
 import { TableSkeleton } from './TableSkeleton';
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
+import { UpdateRoleDialog } from './UpdateRoleDialog';
+import { DeleteRoleDialog } from './DeleteRoleDialog';
 
 type RoleTableProps = {
   roles: Role[] | undefined;
@@ -38,8 +40,8 @@ export const RolesTable = ({ roles }: RoleTableProps) => {
                       </IconButton>
                     </DropdownMenu.Trigger>
                     <DropdownMenu.Content>
-                      <DropdownMenu.Item>Edit</DropdownMenu.Item>
-                      <DropdownMenu.Item>Delete</DropdownMenu.Item>
+                      <UpdateRoleDialog role={role} />
+                      <DeleteRoleDialog role={role} />
                     </DropdownMenu.Content>
                   </DropdownMenu.Root>
                 </Flex>

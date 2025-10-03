@@ -1,10 +1,17 @@
-import { InfoCircledIcon, PlusIcon } from '@radix-ui/react-icons';
-import { Box, Button, Callout, Dialog, Flex } from '@radix-ui/themes';
+import { InfoCircledIcon } from '@radix-ui/react-icons';
+import {
+  Box,
+  Button,
+  Callout,
+  Dialog,
+  DropdownMenu,
+  Flex,
+} from '@radix-ui/themes';
 import { TextInput } from './Inputs/TextInput';
 import { FormProvider, useForm } from 'react-hook-form';
-import type { NewRole } from '../api/models';
+import type { NewRole, Role } from '../api/models';
 import { useEffect, useState } from 'react';
-import { useCreateRoleMutation } from '../api/roles/hooks';
+import { useUpdateRoleMutation } from '../api/roles/hooks';
 import { SelectInput } from './Inputs/SelectInput';
 
 type FormData = {
@@ -12,21 +19,22 @@ type FormData = {
   description: string;
   isDefault: string;
 };
-const defaultValues: FormData = {
-  name: '',
-  description: '',
-  isDefault: 'false',
-};
+
+const mapRoleToForm = (role: Role) => ({
+  ...role,
+  isDefault: String(role.isDefault),
+});
 
 const mapFormToRole = (role: FormData): NewRole => ({
   ...role,
-  isDefault: Boolean(role.isDefault),
+  isDefault: role.isDefault === 'true',
 });
 
-export const AddRoleDialog = () => {
+type UpdateRoleProps = { role: Role };
+export const UpdateRoleDialog = ({ role }: UpdateRoleProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const form = useForm<FormData>({ defaultValues });
+  const form = useForm<FormData>({ defaultValues: mapRoleToForm(role) });
 
   const {
     mutate,
@@ -34,11 +42,11 @@ export const AddRoleDialog = () => {
     reset: resetMutation,
     error,
     isPending,
-  } = useCreateRoleMutation();
+  } = useUpdateRoleMutation();
 
   useEffect(() => {
     if (isOpen) {
-      form.reset(defaultValues);
+      form.reset(mapRoleToForm(role));
       resetMutation();
     }
   }, [form, isOpen, resetMutation]);
@@ -52,20 +60,21 @@ export const AddRoleDialog = () => {
   return (
     <Dialog.Root onOpenChange={setIsOpen} open={isOpen}>
       <Dialog.Trigger>
-        <Button>
-          <PlusIcon />
-          Add Role
-        </Button>
+        <DropdownMenu.Item onSelect={(e) => e.preventDefault()}>
+          Edit
+        </DropdownMenu.Item>
       </Dialog.Trigger>
 
       <Dialog.Content maxWidth="450px">
         <FormProvider {...form}>
           <form
-            onSubmit={form.handleSubmit((role) => mutate(mapFormToRole(role)))}
+            onSubmit={form.handleSubmit((formData) =>
+              mutate({ roleId: role.id, role: mapFormToRole(formData) })
+            )}
           >
-            <Dialog.Title>Add Role</Dialog.Title>
+            <Dialog.Title>Update Role</Dialog.Title>
             <Dialog.Description size="2" mb="4">
-              Add a new role.
+              Update an existing role.
             </Dialog.Description>
 
             <Flex direction="column" gap="3">

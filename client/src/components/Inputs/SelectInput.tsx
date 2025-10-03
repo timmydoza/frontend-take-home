@@ -21,7 +21,7 @@ export const SelectInput = ({
 }: SelectInputProps) => {
   const { register, setValue } = useFormContext();
   const value = useWatch({ name });
-  console.log(value);
+
   const { errors } = useFormState({ name });
 
   const error = errors[name];

@@ -55,7 +55,7 @@ export const updateRole = async ({
   role: NewRole;
 }): Promise<Role> => {
   const res = await fetch(`http://localhost:3002/roles/${roleId}`, {
-    method: 'POST',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(role),
   });
@@ -67,7 +67,7 @@ export const updateRole = async ({
 
 export const deleteRole = async (roleId: string): Promise<Role> => {
   const res = await fetch(`http://localhost:3002/roles/${roleId}`, {
-    method: 'POST',
+    method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
   });
 
