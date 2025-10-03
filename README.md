@@ -4,7 +4,7 @@ Hi! Thanks for taking a look at my take home assignment.
 
 ## Installation
 
-To install all dependencies, run this command:
+To install all dependencies, run this command in the project root:
 
 ```bash
 npm install
@@ -14,13 +14,13 @@ This should install all dependencies for both the client/ and the server/ folder
 
 ## Run
 
-To start the application, run this command:
+To start the application, run this command in the project root:
 
 ```bash
 npm run dev
 ```
 
-This should run two concurrent npm commands for both the client and the server.
+This should run two concurrent npm commands for both the client and the server. Then visit `http://localhost:5173` in your browser.
 
 ## Other thoughts
 
@@ -37,7 +37,7 @@ Thinking about the requirements of this project, I knew that we need certain fea
 
 This all could be built from scratch, but we'd have to build a somewhat substantial state management system, in a React Provider, for the caching mechanism. We'd also have to build a number of custom 'fetch' hooks so that information about loading and errors could be used. This is not a small amount of work, so it seems best to get help from a library. The `react-query` library by Tanstack gives us many of these features right out of the box. The `queryClient` is essentially a state management system for server data and caching.
 
-Another useful library that is it's own kind of 'state management system' is `react-hook-form`. This library manages the state for forms, including field values, field validity, and field errors. The functionality here would be cumbersome to build from scratch, so this is also a library work using. The library features that we will be using include:
+Another useful library that is it's own kind of 'state management system' is `react-hook-form`. This library manages the state for forms, including field values, field validity, and field errors. The functionality here would be cumbersome to build from scratch, so this is also a library worth using. The library features that we will be using include:
 
 - Tracking form updates efficiently (without causing needless react updates)
 - Specifying error messages for required fields
@@ -45,6 +45,10 @@ Another useful library that is it's own kind of 'state management system' is `re
 - Hiding all error information before submission attempts.
 
 A deliberate pattern that I implemented with this library has to do with form submission and errors. I'm allowing users to always be able to click the Submit button, even when the form is incomplete or invalid. If the user attempts to submit a bad form, then actionable error messages will be shown next to the inputs with problems. This is in contrast to the pattern of disabling the Submit button when the form is invalid. This prevents bad form submissions, but it does not give the user any actionable information, and leaves them 'guessing' about how to fix the form.
+
+One benefit of seeing `react-query` and `react-hook-form` as specialized state management libraries, is that they greatly help to reduce the amount of state management that we need to implement ourselves. With these libraries, the only state management that we needed to build for this application was nothing more than a handful of `useState()` hooks.
+
+### UI
 
 Lastly, `radix/themes` was used for UI components. This was the obvious choice for this project, but this library does appear to provide the right components to build the Figma mocks that were provided. I also wanted to use this library to gain some practice with it, because it's new to me.
 
