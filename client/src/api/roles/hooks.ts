@@ -11,12 +11,14 @@ export const useQueryAllRoles = () =>
   useQuery({
     queryKey: ['roles', 'all'],
     queryFn: fetchAllRoles,
+    retry: 3,
   });
 
 export const useQueryRoles = (page: number, search: string) =>
   useQuery({
     queryKey: ['roles', page, search],
     queryFn: () => fetchRoles(page, search),
+    retry: 3,
   });
 
 export const useCreateRoleMutation = () => {

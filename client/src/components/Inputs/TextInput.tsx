@@ -30,6 +30,7 @@ export const TextInput = ({
         {...register(name, {
           required: required ? 'This field is required' : undefined,
         })}
+        data-1p-ignore // Disables 1password helper
       >
         {icon && <TextField.Slot>{icon}</TextField.Slot>}
       </TextField.Root>

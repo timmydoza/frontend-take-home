@@ -24,18 +24,35 @@ export const fetchRole = async (roleId: string): Promise<Role> => {
 };
 
 export const fetchAllRoles = async (): Promise<Role[]> => {
-  const res1 = await fetch('http://localhost:3002/roles?page=1');
-  if (!res1.ok) throw new Error('failed to fetch roles');
-  const page1: RolesResponse = await res1.json();
+  const fetchPage = async (page: number): Promise<RolesResponse> => {
+    const res = await fetch(`http://localhost:3002/roles?page=${page}`);
+    if (!res.ok) {
+      throw new Error(
+        `Failed to fetch roles (page ${page}, status ${res.status})`
+      );
+    }
+    return res.json() as Promise<RolesResponse>;
+  };
 
-  const rest: Promise<RolesResponse>[] = [];
+  // first page is mandatory: need to know `pages`
+  const page1 = await fetchPage(1);
+
+  // fetch the rest in parallel
+  const promises: Promise<RolesResponse>[] = [];
   for (let p = 2; p <= page1.pages; p++) {
-    rest.push(
-      fetch(`http://localhost:3002/roles?page=${p}`).then((r) => r.json())
+    promises.push(fetchPage(p));
+  }
+
+  let others: RolesResponse[];
+  try {
+    others = await Promise.all(promises);
+  } catch (err) {
+    // optional: rethrow with more context
+    throw new Error(
+      `Failed to fetch subsequent role pages: ${(err as Error).message}`
     );
   }
 
-  const others = await Promise.all(rest);
   return [page1, ...others].flatMap((r) => r.data);
 };
 

@@ -4,6 +4,7 @@ import { Box, Container, Section, Tabs, Theme } from '@radix-ui/themes';
 
 import { UserTab } from './components/UserTab';
 import { RolesTab } from './components/RolesTab';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 const queryClient = new QueryClient();
 
@@ -13,22 +14,24 @@ function App() {
       <Theme>
         <Section>
           <Container>
-            <Tabs.Root defaultValue="users">
-              <Tabs.List highContrast size="2">
-                <Tabs.Trigger value="users">Users</Tabs.Trigger>
-                <Tabs.Trigger value="roles">Roles</Tabs.Trigger>
-              </Tabs.List>
+            <ErrorBoundary>
+              <Tabs.Root defaultValue="users">
+                <Tabs.List highContrast size="2">
+                  <Tabs.Trigger value="users">Users</Tabs.Trigger>
+                  <Tabs.Trigger value="roles">Roles</Tabs.Trigger>
+                </Tabs.List>
 
-              <Box pt="3">
-                <Tabs.Content value="users">
-                  <UserTab />
-                </Tabs.Content>
+                <Box pt="3">
+                  <Tabs.Content value="users">
+                    <UserTab />
+                  </Tabs.Content>
 
-                <Tabs.Content value="roles">
-                  <RolesTab />
-                </Tabs.Content>
-              </Box>
-            </Tabs.Root>
+                  <Tabs.Content value="roles">
+                    <RolesTab />
+                  </Tabs.Content>
+                </Box>
+              </Tabs.Root>
+            </ErrorBoundary>
           </Container>
         </Section>
       </Theme>

@@ -1,6 +1,6 @@
 import { DropdownMenu, Flex, IconButton, Table } from '@radix-ui/themes';
 import type { Role } from '../api/models';
-import { TableSkeleton } from './TableSkeleton';
+import { TableSkeletonRows } from './TableSkeletonRows';
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
 import { UpdateRoleDialog } from './UpdateRoleDialog';
 import { DeleteRoleDialog } from './DeleteRoleDialog';
@@ -11,26 +11,31 @@ type RoleTableProps = {
   pagination: React.ReactNode;
 };
 export const RolesTable = ({ roles, pagination }: RoleTableProps) => {
-  if (!roles) return <TableSkeleton />;
-
   return (
     <Table.Root variant="surface">
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>Is Default</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>Is&nbsp;Default</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>Description</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Created Date</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {roles.map((role) => {
-          const dateJoined = new Date(role.createdAt).toLocaleString();
+        {!roles && <TableSkeletonRows columns={5} />}
+        {roles?.map((role) => {
+          const dateJoined = new Date(role.createdAt).toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          });
 
           return (
             <Table.Row key={role.id}>
               <Table.RowHeaderCell>{role.name}</Table.RowHeaderCell>
               <Table.Cell>{String(role.isDefault).toUpperCase()}</Table.Cell>
+              <Table.Cell>{role.description}</Table.Cell>
               <Table.Cell>{dateJoined}</Table.Cell>
               <Table.Cell>
                 <Flex justify="end">
@@ -61,11 +66,3 @@ export const RolesTable = ({ roles, pagination }: RoleTableProps) => {
     </Table.Root>
   );
 };
-
-// stuff to do
-/* make dialogs for edit, and delete for roles and users
-make dialog for vieweing selected entitity
-fix select input
-add aria
-
-*/

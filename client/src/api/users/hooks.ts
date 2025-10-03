@@ -5,6 +5,7 @@ export const useQueryUsers = (page: number, search: string) =>
   useQuery({
     queryKey: ['users', page, search],
     queryFn: () => fetchUsers(page, search),
+    retry: 3,
   });
 
 export const useCreateUserMutation = () => {

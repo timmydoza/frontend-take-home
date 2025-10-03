@@ -6,7 +6,7 @@ import {
   Table,
 } from '@radix-ui/themes';
 import type { Role, User } from '../api/models';
-import { TableSkeleton } from './TableSkeleton';
+import { TableSkeletonRows } from './TableSkeletonRows';
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
 import { UpdateUserDialog } from './UpdateUserDialog';
 import { DeleteUserDialog } from './DeleteUserDialog';
@@ -18,8 +18,6 @@ type UserTableProps = {
   pagination: React.ReactNode;
 };
 export const UserTable = ({ users, rolesMap, pagination }: UserTableProps) => {
-  if (!users || !rolesMap) return <TableSkeleton />;
-
   return (
     <Table.Root variant="surface">
       <Table.Header>
@@ -31,10 +29,16 @@ export const UserTable = ({ users, rolesMap, pagination }: UserTableProps) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
+        {(!users || !rolesMap) && <TableSkeletonRows columns={4} />}
         {users?.map((user) => {
           const name = `${user.first} ${user.last}`;
-          const roleName = rolesMap[user.roleId].name;
-          const dateJoined = new Date(user.createdAt).toLocaleString();
+          const role = rolesMap?.[user.roleId];
+          const roleName = role?.name;
+          const dateJoined = new Date(user.createdAt).toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          });
 
           return (
             <Table.Row key={user.id}>
