@@ -118,3 +118,5 @@ type FormData = {
 This would eliminate a whole class of bug where a mis-typed string can cause runtime problems not caught by TS (similar issues exist in the cache key strings for `useQuery`).
 
 There is a small UI problem in the dropdown menu with the "Edit" and "Delete" options. Once an "edit" modal is opened and closed, the dropdown menu remains open. There appears to be a [workaround](https://github.com/radix-ui/primitives/issues/1836?utm_source=chatgpt.com) for this, but it isn't so simple. I decided to just leave this problem for now while also noting what this fix would be.
+
+Another improvement would be to add a loading spinner somewhere in the table. Say, if you edit a role name, then switch over to the users tab and look at a user with the same role, it may take a second or two for this new role name to make it into the `react-query` cache. During this time, it would be nice to display something to the user to indicate that new data is being fetched. Alternatively, we could just show `<Skeleton />` components when the cache is being refreshed, but this feels like an approach that could be jarring for the user.
