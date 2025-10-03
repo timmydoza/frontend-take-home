@@ -1,92 +1,105 @@
 # Frontend Take-Home Assignment
 
-Welcome to the WorkOS Frontend Take-Home Assignment!
+Hi! Thanks for taking a look at my take home assignment.
 
-In this exercise, you'll implement the UI for a simple two-tab layout that lists users and roles. You will also add limited functionality to update users and roles.
+## Installation
 
-You should have received an invitation to view a Figma design file for the take-home assignment. If you haven't received and invitation email, please reach out to us.
+To install all dependencies, run this command:
 
-To get you started, we've also provided a fully functional backend API. Keep in mind, you won’t need to implement all of the functionality implied by the design or backend API. Make sure to focus on the specific tasks outlined below.
+```bash
+npm install
+```
 
-Feel free to use any frontend framework and libraries you prefer — there’s no need to build everything from scratch. At WorkOS, we use [Radix Themes](https://www.radix-ui.com/), and it's perfectly fine if you want to leverage similar libraries. Just be ready to explain your decisions, including why you chose certain libraries and how they benefit the project.
+This should install all dependencies for both the client/ and the server/ folders.
 
-If you have any questions, feel free to reach out — we're happy to clarify anything.
+## Run
 
-## Time Consideration
+To start the application, run this command:
 
-We value your time! If this assignment takes you more than 8 hours, please submit whatever you have at that point.
+```bash
+npm run dev
+```
 
-Focus on quality. You should be proud of your submission. While the code doesn't need to be 100% production-ready, it should be polished enough for a demo.
+This should run two concurrent npm commands for both the client and the server.
 
-Be sure to include a README that outlines what you'd improve or do differently if you had more time.
+## Other thoughts
 
-## Getting Started
+### Libraries
 
-1. **Fork the Repo**: Start by forking this repository so that you have your own version to work with.
-2. **Start the Backend API**:
-   - Ensure you have the latest version of Node.js.
-   - Run the following commands to install dependencies and start the API:
-     ```bash
-     cd server
-     npm install
-     npm run api
-     ```
-3. **Project Setup**: Add your project under the `client` directory.
+Whenever a new React application is built, consideration must be given to which libraries should be used in the application. One way to think about this is to ask yourself "what would it take to build everything from scratch?"
 
-## Design Reference
+Thinking about the requirements of this project, I knew that we need certain features with respect to fetching data from the server:
 
-Be sure to consult the Figma design file that you were invited to view. You'll need to sign-in to Figma to access the design, so you may need to create a Figma account.
+- Fetch data, and store in cache
+- Invalidate cache after posting data to server
+- See loading states while data is fetching
+- See error states in case of error
 
-The design is a starting point — you'll need to fill in some details (e.g., loading states, error states, hover states). The "Roles" tab is not designed, so you'll infer the design based on what is provided for the "Users" tab.
+This all could be built from scratch, but we'd have to build a somewhat substantial state management system, in a React Provider, for the caching mechanism. We'd also have to build a number of custom 'fetch' hooks so that information about loading and errors could be used. This is not a small amount of work, so it seems best to get help from a library. The `react-query` library by Tanstack gives us many of these features right out of the box. The `queryClient` is essentially a state management system for server data and caching.
 
-For those portions of the exercise in which the design is given, your implementation should match the design as closely as possible. Attention to detail is important. It is certainly acceptable to deviate from the design if you are confident it is an improvement, but please explain your thinking in your README.
+Another useful library that is it's own kind of 'state management system' is `react-hook-form`. This library manages the state for forms, including field values, field validity, and field errors. The functionality here would be cumbersome to build from scratch, so this is also a library work using. The library features that we will be using include:
 
-## Backend API
+- Tracking form updates efficiently (without causing needless react updates)
+- Specifying error messages for required fields
+- Submitting form data only when whole form is valid
+- Hiding all error information before submission attempts.
 
-The API provides full CRUD support for users and roles, but you won’t need to use every endpoint.
+A deliberate pattern that I implemented with this library has to do with form submission and errors. I'm allowing users to always be able to click the Submit button, even when the form is incomplete or invalid. If the user attempts to submit a bad form, then actionable error messages will be shown next to the inputs with problems. This is in contrast to the pattern of disabling the Submit button when the form is invalid. This prevents bad form submissions, but it does not give the user any actionable information, and leaves them 'guessing' about how to fix the form.
 
-**Do not alter the backend API**.
+Lastly, `radix/themes` was used for UI components. This was the obvious choice for this project, but this library does appear to provide the right components to build the Figma mocks that were provided. I also wanted to use this library to gain some practice with it, because it's new to me.
 
-The API includes intentional latency and random server errors to simulate real-world scenarios. Ensure your front-end handles these gracefully.
+`radix/themes` seems to have very good defaults right out of the box, and it takes special care to be a user-friendly and accessible component library. For instance, one thing I wanted to implement (which radix handles automatically), is that, when trying to delete a user or role in the `<AlertDialog />` component, the browsers focus should not automatically be on the Delete button. This helps to prevent the accidental deletion of these entities.
 
-You can adjust the API speed using the `SERVER_SPEED` environment variable:
+### What could be done better?
 
-- **slow**: Simulate slower network (`SERVER_SPEED=slow npm run api`)
-- **instant**: Remove latency (`SERVER_SPEED=instant npm run api`)
+I feel that the frontend code for this project is good. It's well-structured, avoids large file lengths, has clean readable code, and utilizes some reusable components and types. There is room for improvement though.
 
-You can run backend tests by executing `npm run test` in the `server` directory. The test code is located at `server/src/api.test.ts`.
+First, I'm seeing that there is some repetitive boilerplate code between all of the dialog components (e.g. `AddUserDialog.tsx`, `AddRoleDialog.tsx`, `UpdateUserDialog.tsx`, etc.). This suggests that a single reusable component could be useful for building these dialog forms. A nice API for a new `<FormDialog />` component could look like this:
 
-## Tasks Overview
+```tsx
+<FormDialog
+  title="Update Role"
+  description="Update an existing role."
+  defaultValues={role}
+  onSubmit={(data) => mutate({ roleId: role.id, role: data })}
+>
+  <TextInput name="name" label="Name" required />
+  <TextInput name="description" label="Description" required />
+  <SelectInput
+    name="isDefault"
+    label="Is Default?"
+    options={[
+      { label: "Yes", value: "true" },
+      { label: "No", value: "false" },
+    ]}
+    required
+  />
+</FormDialog>
+```
 
-Work on the following tasks in this order. If you can’t complete all tasks, focus on quality rather than quantity.
+Another opportunity to refactor lies in the two tables. These tables both contain some duplicate code, and could also benefit from a common `<Table />` component. This component could accept a declarative table configuration array, similar to what is produced by the Tanstack Table library.
 
-1. Setup the "Users" and "Roles" tab structure
-2. Add the users table
-3. Add support for filtering the users table via the "Search" input field
-4. Add support for deleting a user via the "more" icon button dropdown menu
-5. Add support for viewing all roles in the "Roles" tab
-6. Add support for renaming a role in the "Roles" tab
-7. [Bonus] Add pagination to the user table
+The error handling code in the `api.ts` is repetitive, and could be improved.
 
-## Evaluation Criteria
+One downside of using `react-hook-form` is that it takes a little bit of work to make any reusable inputs type-save. This application does have some reusable inputs that consume a `react-hook-form` context, but there is currently no protection in place around using these inputs improperly:
 
-We’ll evaluate based on the following:
+Right now it is possible to supply a name prop that does not point to a value in a form:
 
-- **User Experience (UX)**: Clean and intuitive interface.
-- **Component Composition**: Modular and reusable components.
-- **State Management & Caching**: Efficient handling of data.
-- **Error & Loading States**: Graceful handling of API delays and errors.
-- **CSS Animations**: Best practices followed for smooth UI interactions.
-- **Code Quality**: Clean, well-structured, and maintainable code.
-- **Accessibility**: Keyboard navigation and accessibility considerations.
+```tsx
+<TextInput name="thisPropertyMightNotExist" />
+```
 
-## Submission Guidelines
+With some clever type-safety, we could pass in a type to these components to make sure that the name prop is correct:
 
-**Please do not submit a pull request to the WorkOS repo.**
+```tsx
+type FormData = {
+  foo: string
+}
 
-In your forked repository, include a README that explains:
+<TextInput<FormData> name="foo" /> // Good!
+<TextInput<FormData> name="doesNotExist" /> // results in typescript error
+```
 
-- How to run your project.
-- What you would improve or do differently if you had more time.
+This would eliminate a whole class of bug where a mis-typed string can cause runtime problems not caught by TS (similar issues exist in the cache key strings for `useQuery`).
 
-Once you're ready, share the URL to your GitHub repository with us. Make sure your code runs locally based on the instructions in your README.
+There is a small UI problem in the dropdown menu with the "Edit" and "Delete" options. Once an "edit" modal is opened and closed, the dropdown menu remains open. There appears to be a [workaround](https://github.com/radix-ui/primitives/issues/1836?utm_source=chatgpt.com) for this, but it isn't so simple. I decided to just leave this problem for now while also noting what this fix would be.
