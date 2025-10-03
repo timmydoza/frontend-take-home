@@ -5,14 +5,14 @@ import { TextInput } from './Inputs/TextInput';
 import { RolesTable } from './RolesTable';
 import { useState } from 'react';
 import { AddRoleDialog } from './AddRoleDialog';
-import { useQueryRoles } from '../api/roles/hooks';
+import { useRolesQuery } from '../api/roles/hooks';
 
 export const RolesTab = () => {
   const form = useForm();
   const [page, setPage] = useState(1);
   const search = useWatch({ control: form.control, name: 'userName' });
 
-  const { data, isLoading, error } = useQueryRoles(page, search);
+  const { data, isLoading, error } = useRolesQuery(page, search);
 
   if (error) throw error; // Fatal error - to be caught by ErrorBoundary
 

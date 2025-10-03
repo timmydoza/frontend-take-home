@@ -7,14 +7,14 @@ import {
   updateRole,
 } from './api';
 
-export const useQueryAllRoles = () =>
+export const useAllRolesQuery = () =>
   useQuery({
     queryKey: ['roles', 'all'],
     queryFn: fetchAllRoles,
     retry: 3,
   });
 
-export const useQueryRoles = (page: number, search: string) =>
+export const useRolesQuery = (page: number, search: string) =>
   useQuery({
     queryKey: ['roles', page, search],
     queryFn: () => fetchRoles(page, search),

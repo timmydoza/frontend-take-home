@@ -1,11 +1,11 @@
 import { SelectInput, type SelectInputProps } from './SelectInput';
 import { Skeleton } from '@radix-ui/themes';
 import { useMemo } from 'react';
-import { useQueryAllRoles } from '../../api/roles/hooks';
+import { useAllRolesQuery } from '../../api/roles/hooks';
 
 type RoleSelectProps = Omit<SelectInputProps, 'options'>;
 export const RoleSelect = (props: RoleSelectProps) => {
-  const allRolesData = useQueryAllRoles();
+  const allRolesData = useAllRolesQuery();
 
   const options = useMemo(
     () =>

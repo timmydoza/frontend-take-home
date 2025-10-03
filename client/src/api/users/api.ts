@@ -15,7 +15,7 @@ export const fetchUsers = async (
   return json;
 };
 
-export const addUser = async (user: NewUser): Promise<User> => {
+export const createUser = async (user: NewUser): Promise<User> => {
   const res = await fetch('http://localhost:3002/users', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

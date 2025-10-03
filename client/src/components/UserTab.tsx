@@ -7,8 +7,8 @@ import type { Role } from '../api/models';
 import { useEffect, useState } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import { AddUserDialog } from './AddUserDialog';
-import { useQueryUsers } from '../api/users/hooks';
-import { useQueryAllRoles } from '../api/roles/hooks';
+import { useUsersQuery } from '../api/users/hooks';
+import { useAllRolesQuery } from '../api/roles/hooks';
 
 export const UserTab = () => {
   const form = useForm();
@@ -16,13 +16,13 @@ export const UserTab = () => {
   const search = useWatch({ control: form.control, name: 'userName' });
   const debouncedSearch = useDebounce(search, 1000);
 
-  const usersData = useQueryUsers(page, debouncedSearch);
+  const usersData = useUsersQuery(page, debouncedSearch);
 
   useEffect(() => {
     setPage(1);
   }, [debouncedSearch]);
 
-  const allRolesData = useQueryAllRoles();
+  const allRolesData = useAllRolesQuery();
 
   const rolesMap = allRolesData.data?.reduce<Record<string, Role>>(
     (acc, role) => {
