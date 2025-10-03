@@ -33,7 +33,7 @@ export const UpdateUserDialog = ({ user }: UpdateUserProps) => {
       form.reset(user);
       resetMutation();
     }
-  }, [form, isOpen, resetMutation]);
+  }, [form, isOpen, resetMutation, user]);
 
   useEffect(() => {
     if (isSuccess) {

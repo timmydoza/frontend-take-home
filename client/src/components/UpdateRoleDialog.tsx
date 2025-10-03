@@ -49,7 +49,7 @@ export const UpdateRoleDialog = ({ role }: UpdateRoleProps) => {
       form.reset(mapRoleToForm(role));
       resetMutation();
     }
-  }, [form, isOpen, resetMutation]);
+  }, [form, isOpen, resetMutation, role]);
 
   useEffect(() => {
     if (isSuccess) {

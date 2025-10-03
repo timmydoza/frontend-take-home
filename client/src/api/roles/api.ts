@@ -23,6 +23,8 @@ export const fetchRole = async (roleId: string): Promise<Role> => {
   return json;
 };
 
+// This function exists to grab all roles at once. It will fetch every page of roles
+// and then return all of them in an array.
 export const fetchAllRoles = async (): Promise<Role[]> => {
   const fetchPage = async (page: number): Promise<RolesResponse> => {
     const res = await fetch(`http://localhost:3002/roles?page=${page}`);
@@ -34,10 +36,10 @@ export const fetchAllRoles = async (): Promise<Role[]> => {
     return res.json() as Promise<RolesResponse>;
   };
 
-  // first page is mandatory: need to know `pages`
+  // Grab first page, so we know the total number of pages.
   const page1 = await fetchPage(1);
 
-  // fetch the rest in parallel
+  // Create an array of all other requests, so we can request them in parallel
   const promises: Promise<RolesResponse>[] = [];
   for (let p = 2; p <= page1.pages; p++) {
     promises.push(fetchPage(p));
@@ -47,7 +49,6 @@ export const fetchAllRoles = async (): Promise<Role[]> => {
   try {
     others = await Promise.all(promises);
   } catch (err) {
-    // optional: rethrow with more context
     throw new Error(
       `Failed to fetch subsequent role pages: ${(err as Error).message}`
     );
