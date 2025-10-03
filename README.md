@@ -54,6 +54,17 @@ Lastly, `radix/themes` was used for UI components. This was the obvious choice f
 
 `radix/themes` seems to have very good defaults right out of the box, and it takes special care to be a user-friendly and accessible component library. For instance, one thing I wanted to implement (which radix handles automatically), is that, when trying to delete a user or role in the `<AlertDialog />` component, the browsers focus should not automatically be on the Delete button. This helps to prevent the accidental deletion of these entities.
 
+### Error Handling
+
+In my mind there are two classes of network errors in this application:
+
+1. Errors that are fatal. There's no recovery from these, the user must reload the page.
+2. Errors that can be retried. These errors can still result in a usable app. Friendly UX is shown to guide the user through a retry.
+
+The API calls for loading a page of users or roles are the requests that can result in 'fatal' errors. If the app cannot load users from the server, what else can be done? In these instances, we throw errors and catch them in an error boundary which instructs the user that a problem has occurred and that the app must be reloaded. One nice feature of `react-query` is that it has built in logic for retrying queries with exponential backoff. This retry logic does make the random server errors mostly invisible to the user when retrieving users or roles.
+
+The API calls for mutating server resources are the requests that are not fatal, and can be retried. The app can still be used after one of these errors. These errors don't use the error boundary, instead they are shown inside a `<Callout />` component near the form. This callout displays the server's error message to the user (useful because sometimes the user must fix something, like a duplicate role name), and offers the user a chance to retry the operation.
+
 ### What could be done better?
 
 I feel that the frontend code for this project is good. It's well-structured, avoids large file lengths, has clean readable code, and utilizes some reusable components and types. There is room for improvement though.
