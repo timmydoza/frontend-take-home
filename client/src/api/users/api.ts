@@ -9,8 +9,10 @@ export const fetchUsers = async (
   if (search) url.searchParams.set('search', search);
 
   const res = await fetch(url.toString());
-  if (!res.ok) throw new Error('fetch failed');
-  return res.json();
+
+  const json = await res.json();
+  if (!res.ok) throw new Error(json?.message ?? 'Error fetching users');
+  return json;
 };
 
 export const addUser = async (user: NewUser): Promise<User> => {
@@ -20,7 +22,36 @@ export const addUser = async (user: NewUser): Promise<User> => {
     body: JSON.stringify(user),
   });
 
-  if (!res.ok) throw new Error('fetch failed');
+  const json = await res.json();
+  if (!res.ok) throw new Error(json?.message ?? 'Error creating user');
+  return json;
+};
 
-  return res.json();
+export const updateUser = async ({
+  userId,
+  user,
+}: {
+  userId: string;
+  user: NewUser;
+}): Promise<User> => {
+  const res = await fetch(`http://localhost:3002/users/${userId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(user),
+  });
+
+  const json = await res.json();
+  if (!res.ok) throw new Error(json?.message ?? 'Error updating user');
+  return json;
+};
+
+export const deleteUser = async (userId: string): Promise<User> => {
+  const res = await fetch(`http://localhost:3002/users/${userId}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  const json = await res.json();
+  if (!res.ok) throw new Error(json?.message ?? 'Error deleting user');
+  return json;
 };

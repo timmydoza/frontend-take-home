@@ -1,6 +1,15 @@
-import { Avatar, Flex, Table } from '@radix-ui/themes';
+import {
+  Avatar,
+  DropdownMenu,
+  Flex,
+  IconButton,
+  Table,
+} from '@radix-ui/themes';
 import type { Role, User } from '../api/models';
 import { TableSkeleton } from './TableSkeleton';
+import { DotsVerticalIcon } from '@radix-ui/react-icons';
+import { UpdateUserDialog } from './UpdateUserDialog';
+import { DeleteUserDialog } from './DeleteUserDialog';
 
 type UserTableProps = {
   users: User[] | undefined;
@@ -17,6 +26,7 @@ export const UserTable = ({ users, rolesMap }: UserTableProps) => {
           <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Joined</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -40,6 +50,21 @@ export const UserTable = ({ users, rolesMap }: UserTableProps) => {
               </Table.RowHeaderCell>
               <Table.Cell>{roleName}</Table.Cell>
               <Table.Cell>{dateJoined}</Table.Cell>
+              <Table.Cell>
+                <Flex justify="end">
+                  <DropdownMenu.Root>
+                    <DropdownMenu.Trigger>
+                      <IconButton variant="soft">
+                        <DotsVerticalIcon />
+                      </IconButton>
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu.Content>
+                      <UpdateUserDialog user={user} />
+                      <DeleteUserDialog user={user} />
+                    </DropdownMenu.Content>
+                  </DropdownMenu.Root>
+                </Flex>
+              </Table.Cell>
             </Table.Row>
           );
         })}

@@ -9,14 +9,18 @@ export const fetchRoles = async (
   if (search) url.searchParams.set('search', search);
 
   const res = await fetch(url.toString());
-  if (!res.ok) throw new Error('fetch failed');
-  return res.json();
+
+  const json = await res.json();
+  if (!res.ok) throw new Error(json?.message ?? 'Error fetching roles');
+  return json;
 };
 
 export const fetchRole = async (roleId: string): Promise<Role> => {
   const res = await fetch(`http://localhost:3002/roles/${roleId}`);
-  if (!res.ok) throw new Error('fetch failed');
-  return res.json();
+
+  const json = await res.json();
+  if (!res.ok) throw new Error(json?.message ?? 'Error fetching role');
+  return json;
 };
 
 export const fetchAllRoles = async (): Promise<Role[]> => {
