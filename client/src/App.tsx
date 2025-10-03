@@ -14,7 +14,7 @@ function App() {
         <Section>
           <Container>
             <Tabs.Root defaultValue="users">
-              <Tabs.List>
+              <Tabs.List highContrast size="2">
                 <Tabs.Trigger value="users">Users</Tabs.Trigger>
                 <Tabs.Trigger value="roles">Roles</Tabs.Trigger>
               </Tabs.List>

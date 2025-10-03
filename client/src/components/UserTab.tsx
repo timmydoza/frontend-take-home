@@ -38,35 +38,40 @@ export const UserTab = () => {
 
   return (
     <Box>
-      <Flex gap="1rem">
+      <Flex gap="1rem" py="1rem">
         <Box width="100%">
           <FormProvider {...form}>
             <TextInput
               name="userName"
+              placeholder="Search by name..."
               icon={<MagnifyingGlassIcon height="16" width="16" />}
             />
           </FormProvider>
         </Box>
         <AddUserDialog />
       </Flex>
-      <Box>
+      <Box pt="1rem">
         <UserTable
           users={usersData.data?.data}
           rolesMap={rolesMap}
           isLoading={isLoading}
+          pagination={
+            <Flex justify="end" gap="1rem">
+              <Button
+                disabled={isLoading || page === 1}
+                onClick={() => setPage((prev) => prev - 1)}
+              >
+                Previous
+              </Button>
+              <Button
+                disabled={isLoading || page === usersData.data?.pages}
+                onClick={() => setPage((prev) => prev + 1)}
+              >
+                Next
+              </Button>
+            </Flex>
+          }
         />
-        <Button
-          disabled={isLoading || page === 1}
-          onClick={() => setPage((prev) => prev - 1)}
-        >
-          Previous
-        </Button>
-        <Button
-          disabled={isLoading || page === usersData.data?.pages}
-          onClick={() => setPage((prev) => prev + 1)}
-        >
-          Next
-        </Button>
       </Box>
     </Box>
   );

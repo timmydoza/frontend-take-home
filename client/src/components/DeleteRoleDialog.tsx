@@ -46,7 +46,7 @@ export const DeleteRoleDialog = ({ role }: DeleteRoleProps) => {
       <AlertDialog.Content maxWidth="450px">
         <AlertDialog.Title>Delete Role</AlertDialog.Title>
         <AlertDialog.Description size="2" mb="4">
-          Are you sure you want to delete role "{role.name}"?
+          Are you sure? The role "{role.name}" will be permanently deleted.
         </AlertDialog.Description>
 
         <Flex gap="3" mt="4" justify="end">
@@ -60,7 +60,6 @@ export const DeleteRoleDialog = ({ role }: DeleteRoleProps) => {
             type="submit"
             loading={isPending}
             onClick={() => mutate(role.id)}
-            variant="solid"
             color="red"
           >
             Delete Role

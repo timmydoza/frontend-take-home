@@ -46,7 +46,8 @@ export const DeleteUserDialog = ({ user }: DeleteUserProps) => {
       <AlertDialog.Content maxWidth="450px">
         <AlertDialog.Title>Delete User</AlertDialog.Title>
         <AlertDialog.Description size="2" mb="4">
-          Are you sure you want to delete user "{user.first} {user.last}"?
+          Are you sure? The user "{user.first} {user.last}" will be permanently
+          deleted.
         </AlertDialog.Description>
 
         <Flex gap="3" mt="4" justify="end">
@@ -60,7 +61,6 @@ export const DeleteUserDialog = ({ user }: DeleteUserProps) => {
             type="submit"
             loading={isPending}
             onClick={() => mutate(user.id)}
-            variant="solid"
             color="red"
           >
             Delete Role

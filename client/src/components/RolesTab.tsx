@@ -20,31 +20,39 @@ export const RolesTab = () => {
 
   return (
     <Box>
-      <Flex gap="1rem">
+      <Flex gap="1rem" py="1rem">
         <Box width="100%">
           <FormProvider {...form}>
             <TextInput
               name="userName"
+              placeholder="Search by name"
               icon={<MagnifyingGlassIcon height="16" width="16" />}
             />
           </FormProvider>
         </Box>
         <AddRoleDialog />
       </Flex>
-      <Box>
-        <RolesTable roles={rolesData.data?.data} isLoading={isLoading} />
-        <Button
-          disabled={isLoading || page === 1}
-          onClick={() => setPage((prev) => Math.min(prev - 1, 0))}
-        >
-          Previous
-        </Button>
-        <Button
-          disabled={isLoading || page === rolesData.data?.pages}
-          onClick={() => setPage((prev) => Math.max(prev + 1, 0))}
-        >
-          Next
-        </Button>
+      <Box pt="1rem">
+        <RolesTable
+          roles={rolesData.data?.data}
+          isLoading={isLoading}
+          pagination={
+            <Flex justify="end" gap="1rem">
+              <Button
+                disabled={isLoading || page === 1}
+                onClick={() => setPage((prev) => Math.min(prev - 1, 0))}
+              >
+                Previous
+              </Button>
+              <Button
+                disabled={isLoading || page === rolesData.data?.pages}
+                onClick={() => setPage((prev) => Math.max(prev + 1, 0))}
+              >
+                Next
+              </Button>
+            </Flex>
+          }
+        />
       </Box>
     </Box>
   );

@@ -15,12 +15,13 @@ type UserTableProps = {
   users: User[] | undefined;
   isLoading: boolean;
   rolesMap: Record<string, Role> | undefined;
+  pagination: React.ReactNode;
 };
-export const UserTable = ({ users, rolesMap }: UserTableProps) => {
+export const UserTable = ({ users, rolesMap, pagination }: UserTableProps) => {
   if (!users || !rolesMap) return <TableSkeleton />;
 
   return (
-    <Table.Root>
+    <Table.Root variant="surface">
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
@@ -68,6 +69,13 @@ export const UserTable = ({ users, rolesMap }: UserTableProps) => {
             </Table.Row>
           );
         })}
+
+        <Table.Row>
+          <Table.Cell />
+          <Table.Cell />
+          <Table.Cell />
+          <Table.Cell>{pagination}</Table.Cell>
+        </Table.Row>
       </Table.Body>
     </Table.Root>
   );

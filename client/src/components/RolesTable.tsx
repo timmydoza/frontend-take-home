@@ -8,12 +8,13 @@ import { DeleteRoleDialog } from './DeleteRoleDialog';
 type RoleTableProps = {
   roles: Role[] | undefined;
   isLoading: boolean;
+  pagination: React.ReactNode;
 };
-export const RolesTable = ({ roles }: RoleTableProps) => {
+export const RolesTable = ({ roles, pagination }: RoleTableProps) => {
   if (!roles) return <TableSkeleton />;
 
   return (
-    <Table.Root>
+    <Table.Root variant="surface">
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
@@ -49,6 +50,13 @@ export const RolesTable = ({ roles }: RoleTableProps) => {
             </Table.Row>
           );
         })}
+
+        <Table.Row>
+          <Table.Cell />
+          <Table.Cell />
+          <Table.Cell />
+          <Table.Cell>{pagination}</Table.Cell>
+        </Table.Row>
       </Table.Body>
     </Table.Root>
   );
