@@ -56,9 +56,9 @@ export const UpdateUserDialog = ({ user }: UpdateUserProps) => {
               mutate({ userId: user.id, user: formData })
             )}
           >
-            <Dialog.Title>Update Role</Dialog.Title>
+            <Dialog.Title>Update User</Dialog.Title>
             <Dialog.Description size="2" mb="4">
-              Update an existing role.
+              Update an existing user.
             </Dialog.Description>
 
             <Flex direction="column" gap="3">

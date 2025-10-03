@@ -38,7 +38,9 @@ export const SelectInput = ({
     <Flex direction="column">
       {label && (
         <label htmlFor={selectId}>
-          <Text weight="bold">{label}</Text>
+          <Text weight="bold" size="2">
+            {label}
+          </Text>
         </label>
       )}
       <Select.Root

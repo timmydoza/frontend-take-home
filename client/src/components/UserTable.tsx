@@ -51,7 +51,7 @@ export const UserTable = ({
 
             return (
               <Table.Row key={user.id}>
-                <Table.RowHeaderCell>
+                <Table.RowHeaderCell style={{ verticalAlign: 'middle' }}>
                   <Flex direction="row" gap="1rem">
                     <Avatar
                       size="1"
@@ -62,9 +62,13 @@ export const UserTable = ({
                     {name}
                   </Flex>
                 </Table.RowHeaderCell>
-                <Table.Cell>{roleName}</Table.Cell>
-                <Table.Cell>{dateJoined}</Table.Cell>
-                <Table.Cell>
+                <Table.Cell style={{ verticalAlign: 'middle' }}>
+                  {roleName}
+                </Table.Cell>
+                <Table.Cell style={{ verticalAlign: 'middle' }}>
+                  {dateJoined}
+                </Table.Cell>
+                <Table.Cell style={{ verticalAlign: 'middle' }}>
                   <Flex justify="end">
                     <DropdownMenu.Root>
                       <DropdownMenu.Trigger>

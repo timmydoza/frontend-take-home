@@ -20,7 +20,7 @@ const defaultValues: FormData = {
 
 const mapFormToRole = (role: FormData): NewRole => ({
   ...role,
-  isDefault: Boolean(role.isDefault),
+  isDefault: role.isDefault === 'true',
 });
 
 export const AddRoleDialog = () => {

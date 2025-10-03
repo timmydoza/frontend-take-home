@@ -41,11 +41,19 @@ export const RolesTable = ({
 
             return (
               <Table.Row key={role.id}>
-                <Table.RowHeaderCell>{role.name}</Table.RowHeaderCell>
-                <Table.Cell>{String(role.isDefault).toUpperCase()}</Table.Cell>
-                <Table.Cell>{role.description}</Table.Cell>
-                <Table.Cell>{dateJoined}</Table.Cell>
-                <Table.Cell>
+                <Table.RowHeaderCell style={{ verticalAlign: 'middle' }}>
+                  {role.name}
+                </Table.RowHeaderCell>
+                <Table.Cell style={{ verticalAlign: 'middle' }}>
+                  {String(role.isDefault).toUpperCase()}
+                </Table.Cell>
+                <Table.Cell style={{ verticalAlign: 'middle' }}>
+                  {role.description}
+                </Table.Cell>
+                <Table.Cell style={{ verticalAlign: 'middle' }}>
+                  {dateJoined}
+                </Table.Cell>
+                <Table.Cell style={{ verticalAlign: 'middle' }}>
                   <Flex justify="end">
                     <DropdownMenu.Root>
                       <DropdownMenu.Trigger>
@@ -68,6 +76,7 @@ export const RolesTable = ({
           })}
 
         <Table.Row>
+          <Table.Cell />
           <Table.Cell />
           <Table.Cell />
           <Table.Cell />

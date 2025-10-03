@@ -28,7 +28,9 @@ export const TextInput = ({
     <Flex direction="column">
       {label && (
         <label htmlFor={inputId}>
-          <Text weight="bold">{label}</Text>
+          <Text weight="bold" size="2">
+            {label}
+          </Text>
         </label>
       )}
       <TextField.Root
