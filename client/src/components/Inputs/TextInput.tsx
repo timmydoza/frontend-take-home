@@ -24,7 +24,11 @@ export const TextInput = ({
 
   return (
     <Flex direction="column">
-      {label && <label>{label}</label>}
+      {label && (
+        <label>
+          <Text weight="bold">{label}</Text>
+        </label>
+      )}
       <TextField.Root
         placeholder={placeholder}
         {...register(name, {
@@ -35,7 +39,11 @@ export const TextInput = ({
         {icon && <TextField.Slot>{icon}</TextField.Slot>}
       </TextField.Root>
 
-      {error && <Text color="red">{String(error.message)}</Text>}
+      {error && (
+        <Text color="red" size="1">
+          {String(error.message)}
+        </Text>
+      )}
     </Flex>
   );
 };

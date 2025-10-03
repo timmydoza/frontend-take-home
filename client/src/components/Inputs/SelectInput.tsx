@@ -34,7 +34,11 @@ export const SelectInput = ({
 
   return (
     <Flex direction="column">
-      {label && <label>{label}</label>}
+      {label && (
+        <label>
+          <Text weight="bold">{label}</Text>
+        </label>
+      )}
       <Select.Root
         defaultValue={value}
         value={value}
@@ -55,7 +59,11 @@ export const SelectInput = ({
         </Select.Content>
       </Select.Root>
 
-      {error && <Text color="red">{String(error.message)}</Text>}
+      {error && (
+        <Text color="red" size="1">
+          {String(error.message)}
+        </Text>
+      )}
     </Flex>
   );
 };
