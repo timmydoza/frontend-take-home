@@ -32,9 +32,10 @@ export const UserTab = () => {
     {}
   );
 
-  const isLoading = !usersData.data || !allRolesData.data;
+  const isLoading = usersData.isLoading || allRolesData.isLoading;
 
-  if (usersData.error) throw usersData.error; // Fatal error - to be caught by ErrorBoundary
+  const error = usersData.error || allRolesData.error;
+  if (error) throw error; // Fatal error - to be caught by ErrorBoundary
 
   return (
     <Box>

@@ -12,11 +12,9 @@ export const RolesTab = () => {
   const [page, setPage] = useState(1);
   const search = useWatch({ control: form.control, name: 'userName' });
 
-  const rolesData = useQueryRoles(page, search);
+  const { data, isLoading, error } = useQueryRoles(page, search);
 
-  const isLoading = !rolesData.data;
-
-  if (rolesData.error) throw rolesData.error; // Fatal error - to be caught by ErrorBoundary
+  if (error) throw error; // Fatal error - to be caught by ErrorBoundary
 
   return (
     <Box>
@@ -34,7 +32,7 @@ export const RolesTab = () => {
       </Flex>
       <Box pt="1rem">
         <RolesTable
-          roles={rolesData.data?.data}
+          roles={data?.data}
           isLoading={isLoading}
           pagination={
             <Flex justify="end" gap="1rem">
@@ -45,7 +43,7 @@ export const RolesTab = () => {
                 Previous
               </Button>
               <Button
-                disabled={isLoading || page === rolesData.data?.pages}
+                disabled={isLoading || page === data?.pages}
                 onClick={() => setPage((prev) => Math.max(prev + 1, 0))}
               >
                 Next

@@ -10,7 +10,11 @@ type RoleTableProps = {
   isLoading: boolean;
   pagination: React.ReactNode;
 };
-export const RolesTable = ({ roles, pagination }: RoleTableProps) => {
+export const RolesTable = ({
+  roles,
+  pagination,
+  isLoading,
+}: RoleTableProps) => {
   return (
     <Table.Root variant="surface">
       <Table.Header>
@@ -23,38 +27,42 @@ export const RolesTable = ({ roles, pagination }: RoleTableProps) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {!roles && <TableSkeletonRows columns={5} />}
-        {roles?.map((role) => {
-          const dateJoined = new Date(role.createdAt).toLocaleString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-          });
+        {isLoading && <TableSkeletonRows columns={5} />}
+        {!isLoading &&
+          roles?.map((role) => {
+            const dateJoined = new Date(role.createdAt).toLocaleString(
+              'en-US',
+              {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+              }
+            );
 
-          return (
-            <Table.Row key={role.id}>
-              <Table.RowHeaderCell>{role.name}</Table.RowHeaderCell>
-              <Table.Cell>{String(role.isDefault).toUpperCase()}</Table.Cell>
-              <Table.Cell>{role.description}</Table.Cell>
-              <Table.Cell>{dateJoined}</Table.Cell>
-              <Table.Cell>
-                <Flex justify="end">
-                  <DropdownMenu.Root>
-                    <DropdownMenu.Trigger>
-                      <IconButton variant="soft">
-                        <DotsVerticalIcon />
-                      </IconButton>
-                    </DropdownMenu.Trigger>
-                    <DropdownMenu.Content>
-                      <UpdateRoleDialog role={role} />
-                      <DeleteRoleDialog role={role} />
-                    </DropdownMenu.Content>
-                  </DropdownMenu.Root>
-                </Flex>
-              </Table.Cell>
-            </Table.Row>
-          );
-        })}
+            return (
+              <Table.Row key={role.id}>
+                <Table.RowHeaderCell>{role.name}</Table.RowHeaderCell>
+                <Table.Cell>{String(role.isDefault).toUpperCase()}</Table.Cell>
+                <Table.Cell>{role.description}</Table.Cell>
+                <Table.Cell>{dateJoined}</Table.Cell>
+                <Table.Cell>
+                  <Flex justify="end">
+                    <DropdownMenu.Root>
+                      <DropdownMenu.Trigger>
+                        <IconButton variant="soft">
+                          <DotsVerticalIcon />
+                        </IconButton>
+                      </DropdownMenu.Trigger>
+                      <DropdownMenu.Content>
+                        <UpdateRoleDialog role={role} />
+                        <DeleteRoleDialog role={role} />
+                      </DropdownMenu.Content>
+                    </DropdownMenu.Root>
+                  </Flex>
+                </Table.Cell>
+              </Table.Row>
+            );
+          })}
 
         <Table.Row>
           <Table.Cell />
